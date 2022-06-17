@@ -92,42 +92,6 @@ ARG RDKAFKA_VER=1.8.2
 ARG PROTOC_VER=3.19.4
 ARG HADOOP_VER=3.3.2
 
-# Dependency: Build and install Redis native client.
-RUN git clone --branch v${HIREDIS_VER} --depth 1 https://github.com/redis/hiredis.git hiredis && \
-    mkdir hiredis/build && \
-    cd hiredis/build && \
-    cmake .. && \
-    make -j$(nproc) && \
-    make install && \
-    cd ../.. && \
-    rm -rf hiredis
-
-RUN git clone --branch ${REDIS_PP_VER} --depth 1 https://github.com/sewenew/redis-plus-plus.git redis_pp && \
-    mkdir redis_pp/build && \
-    cd redis_pp/build && \
-    cmake -DREDIS_PLUS_PLUS_CXX_STANDARD=17 .. && \
-    make -j$(nproc) && \
-    make install && \
-    cd ../.. && \
-    rm -rf redis_pp
-
-# Dependency: Build and install RocksDB.
-RUN git clone --branch v${ROCKSDB_VER} --depth 1 https://github.com/facebook/rocksdb.git rocksdb && \
-    cd rocksdb && \
-    PORTABLE=1 make -j$(nproc) shared_lib && \
-    make install-shared && \
-    cd .. && \
-    rm -rf rocksdb
-
-# Dependency: Build and install RdKafka.
-RUN git clone --branch v"${RDKAFKA_VER}" --depth 1 https://github.com/edenhill/librdkafka.git rdkafka && \
-    cd rdkafka && \
-    ./configure --enable-static && \
-    make -j$(nproc) && \
-    make install && \
-    cd .. && \
-    rm -rf rdkafka
-
 # Optional dependency: Build and install protocol buffers and Hadoop/HDFS.
 ARG INSTALL_HDFS=false
 ARG BUILD_HADOOP=false
