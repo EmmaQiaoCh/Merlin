@@ -94,50 +94,6 @@ ARG HADOOP_VER=3.3.2
 
 # Optional dependency: Build and install protocol buffers and Hadoop/HDFS.
 ARG INSTALL_HDFS=false
-ARG BUILD_HADOOP=false
-
-RUN git clone --branch v${PROTOC_VER} --depth 1 https://github.com/protocolbuffers/protobuf.git protobuf && \
-    cd protobuf && \
-    git submodule update --init --recursive && \
-    ./autogen.sh && \
-    ./configure && \
-    make -j$(nproc) && \
-    make install && \
-    cd .. && \
-    rm -rf protobuf && \
-    ldconfig && \
-    echo "Protocol Buffers version: $(protoc --version)"
-
-ENV HADOOP_HOME=/opt/hadoop
-ENV PATH=${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin \
-    HDFS_NAMENODE_USER=root \
-    HDFS_SECONDARYNAMENODE_USER=root \
-    HDFS_DATANODE_USER=root \
-    YARN_RESOURCEMANAGER_USER=root \
-    YARN_NODEMANAGER_USER=root \
-    # Tackles with ThreadReaper stack overflow issues: https://bugs.openjdk.java.net/browse/JDK-8153057
-    LIBHDFS_OPTS='-Djdk.lang.processReaperUseDefaultStackSize=true' \
-    # Tackles with JVM setting error signals that UCX library will check (GitLab issue #425).
-    UCX_ERROR_SIGNALS='' \
-    CLASSPATH=${CLASSPATH}:\
-${HADOOP_HOME}/etc/hadoop/*:\
-${HADOOP_HOME}/share/hadoop/common/*:\
-${HADOOP_HOME}/share/hadoop/common/lib/*:\
-${HADOOP_HOME}/share/hadoop/hdfs/*:\
-${HADOOP_HOME}/share/hadoop/hdfs/lib/*:\
-${HADOOP_HOME}/share/hadoop/mapreduce/*:\
-${HADOOP_HOME}/share/hadoop/yarn/*:\
-${HADOOP_HOME}/share/hadoop/yarn/lib/*
-
-RUN if [[ "${INSTALL_HDFS}" == "true" || "${BUILD_HADOOP}" == "true" ]]; then \
-        ./build-hadoop.sh "${HADOOP_VER}" \
-    ; fi && \
-    if [[ "${INSTALL_HDFS}" == "true" ]]; then \
-        ./install-hadoop.sh "${HADOOP_VER}" \
-    ; fi
-
-# HugeCTR itself.
-
 # Arguments "_XXXX" are only valid when $HUGECTR_DEV_MODE==false
 ARG HUGECTR_DEV_MODE=false
 ARG _HUGECTR_REPO="github.com/NVIDIA-Merlin/HugeCTR.git"
@@ -171,10 +127,10 @@ RUN if [[ "${HUGECTR_DEV_MODE}" == "false" ]]; then \
         git submodule update --init --recursive && \
         mkdir build && \
         cd build && \
-        if [[ -f "/usr/local/lib/libhdfs.so" ]]; then \
-            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON -DENABLE_HDFS=ON .. \
-        ; else \
+        if [[ "${INSTALL_HDFS}" == "false" ]]; then \
             cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+        ; else \
+            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON -DENABLE_HDFS=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
         ; fi && \
         make -j$(nproc) && \
         make install && \
@@ -191,10 +147,10 @@ RUN if [[ "${HUGECTR_DEV_MODE}" == "false" ]]; then \
         cd build && \
         LD_LIBRARY_PATH=/usr/local/cuda/lib64/stubs/:$LD_LIBRARY_PATH && \
         export PATH=$PATH:/usr/local/cuda-${CUDA_SHORT_VERSION}/compat && \
-        if [[ -f "/usr/local/lib/libhdfs.so" ]]; then \
-            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON -DENABLE_HDFS=ON .. \
-        ; else \
+        if [[ "${INSTALL_HDFS}" == "false" ]]; then \
             cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+        ; else \
+            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON -DENABLE_HDFS=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
         ; fi && \
         make -j$(nproc) && \
         make install && \
