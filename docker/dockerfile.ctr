@@ -84,14 +84,6 @@ RUN mkdir -p /var/tmp && wget -q -nc --no-check-certificate -P /var/tmp https://
 # -----------------------------------------------------------------------------
 #    HugeCTR + Dependencies
 
-ARG HIREDIS_VER=1.0.2
-ARG REDIS_PP_VER=1.3.3
-ARG ROCKSDB_VER=6.29.3
-ARG RDKAFKA_VER=1.8.2
-# Optional.
-ARG PROTOC_VER=3.19.4
-ARG HADOOP_VER=3.3.2
-
 # Optional dependency: Build and install protocol buffers and Hadoop/HDFS.
 ARG INSTALL_HDFS=false
 # Arguments "_XXXX" are only valid when $HUGECTR_DEV_MODE==false
@@ -128,9 +120,9 @@ RUN if [[ "${HUGECTR_DEV_MODE}" == "false" ]]; then \
         mkdir build && \
         cd build && \
         if [[ "${INSTALL_HDFS}" == "false" ]]; then \
-            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON .. \
         ; else \
-            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON -DENABLE_HDFS=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_INFERENCE=ON -DENABLE_HDFS=ON .. \
         ; fi && \
         make -j$(nproc) && \
         make install && \
@@ -148,9 +140,9 @@ RUN if [[ "${HUGECTR_DEV_MODE}" == "false" ]]; then \
         LD_LIBRARY_PATH=/usr/local/cuda/lib64/stubs/:$LD_LIBRARY_PATH && \
         export PATH=$PATH:/usr/local/cuda-${CUDA_SHORT_VERSION}/compat && \
         if [[ "${INSTALL_HDFS}" == "false" ]]; then \
-            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON .. \
         ; else \
-            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON -DENABLE_HDFS=ON -DCMAKE_INSTALL_PREFIX=/usr/local .. \
+            cmake -DCMAKE_BUILD_TYPE=Release -DSM="60;61;70;75;80" -DENABLE_MULTINODES=ON -DENABLE_HDFS=ON .. \
         ; fi && \
         make -j$(nproc) && \
         make install && \
