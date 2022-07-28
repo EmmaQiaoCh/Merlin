@@ -55,6 +55,7 @@ ENV JAVA_HOME=/usr/lib/jvm/default-java
 ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${JAVA_HOME}/lib:${JAVA_HOME}/lib/server
 
 RUN pip install nvidia-pyindex mpi4py onnx onnxruntime
+RUN pip uninstall -y mpmath
 RUN pip install betterproto graphviz pybind11 pydot pytest transformers==4.12
 RUN pip install --upgrade notebook
 RUN pip install --upgrade ipython
@@ -89,7 +90,7 @@ ARG HUGECTR_DEV_MODE=false
 ARG _HUGECTR_REPO="github.com/NVIDIA-Merlin/HugeCTR.git"
 ARG _CI_JOB_TOKEN=""
 
-ENV OMPI_MCA_plm_rsh_agent=sh
+ENV OMPI_MCA_plm_rsh_agent=ssh
 ENV OMPI_MCA_opal_cuda_support=true
 
 ENV NCCL_LAUNCH_MODE=PARALLEL
