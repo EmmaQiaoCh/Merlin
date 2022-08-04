@@ -34,16 +34,6 @@ RUN apt update -y --fix-missing && \
         #   Required to build RdKafka.
             zlib1g-dev libzstd-dev \
             libssl-dev libsasl2-dev \
-        #   Required to build Protocol Buffers.
-            autoconf automake libtool \
-        #   Required to build Hadoop.
-            default-jdk maven \
-            libpmem-dev \
-            libsasl2-dev libssl-dev \
-            libsnappy-dev libzstd-dev zlib1g-dev \
-        #   Required to run Hadoop.
-            openssh-server &&\
-    apt autoremove -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
