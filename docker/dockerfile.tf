@@ -33,7 +33,7 @@ RUN apt update -y --fix-missing && \
             zlib1g-dev libbz2-dev libsnappy-dev liblz4-dev libzstd-dev \
         #   Required to build RdKafka.
             zlib1g-dev libzstd-dev \
-            libssl-dev libsasl2-dev \
+            libssl-dev libsasl2-dev && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
 
