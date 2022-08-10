@@ -50,6 +50,7 @@ ENV LD_LIBRARY_PATH=/usr/local/hugectr/lib:$LD_LIBRARY_PATH \
 ARG HUGECTR_DEV_MODE=false
 ARG _HUGECTR_REPO="github.com/NVIDIA-Merlin/HugeCTR.git"
 ARG _CI_JOB_TOKEN=""
+ARG HUGECTR_VER=master
 
 RUN mkdir -p /usr/local/nvidia/lib64 && \
     ln -s /usr/local/cuda/lib64/libcusolver.so /usr/local/nvidia/lib64/libcusolver.so.10
@@ -57,17 +58,16 @@ RUN mkdir -p /usr/local/nvidia/lib64 && \
 RUN ln -s /usr/lib/x86_64-linux-gnu/libibverbs.so.1 /usr/lib/x86_64-linux-gnu/libibverbs.so
 
 RUN if [ "$HUGECTR_DEV_MODE" == "false" ]; then \
-        git clone https://${_CI_JOB_TOKEN}${_HUGECTR_REPO} /hugectr && \
+        git clone --branch ${HUGECTR_VER} --depth 1 https://${_CI_JOB_TOKEN}${_HUGECTR_REPO} /hugectr && \
         pushd /hugectr && \
-          git checkout ${HUGECTR_VER} && \
-          git submodule update --init --recursive
-          # Install SOK
-          cd sparse_operation_kit && \
-          python setup.py install && \
-          # Install HPS TF plugin
-          cd ../hierarchical_parameter_server && \
-          pip install ninja && \
-          python setup.py install && \
+	pip install ninja && \
+        git submodule update --init --recursive && \
+        # Install SOK
+        cd sparse_operation_kit && \
+        python setup.py install && \
+        # Install HPS TF plugin
+        cd ../hierarchical_parameter_server && \
+        python setup.py install && \
         popd; \
     fi
 
