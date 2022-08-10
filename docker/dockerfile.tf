@@ -60,7 +60,13 @@ RUN if [ "$HUGECTR_DEV_MODE" == "false" ]; then \
         git clone https://${_CI_JOB_TOKEN}${_HUGECTR_REPO} /hugectr && \
         pushd /hugectr && \
           git checkout ${HUGECTR_VER} && \
+          git submodule update --init --recursive
+          # Install SOK
           cd sparse_operation_kit && \
+          python setup.py install && \
+          # Install HPS TF plugin
+          cd ../hierarchical_parameter_server && \
+          pip install ninja && \
           python setup.py install && \
         popd; \
     fi
