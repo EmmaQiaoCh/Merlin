@@ -39,7 +39,7 @@ RUN apt update -y --fix-missing && \
 
 # Install cmake
 RUN wget http://www.cmake.org/files/v3.21/cmake-3.21.1.tar.gz && \
-    tar xf cmake-3.21.1.tar.gz && cd cmake-3.21.1 && ./configure && make && make install
+    tar xf cmake-3.21.1.tar.gz && cd cmake-3.21.1 && ./configure && make -j && make install
 
 # Install HugeCTR
 ENV LD_LIBRARY_PATH=/usr/local/hugectr/lib:$LD_LIBRARY_PATH \
