@@ -25,9 +25,9 @@ COPY --chown=1000:1000 --from=dlfw /usr/local/lib/tensorflow/ /usr/local/lib/ten
 COPY --chown=1000:1000 --from=dlfw /usr/local/lib/python3.8/dist-packages/horovod /usr/local/lib/python3.8/dist-packages/horovod/
 COPY --chown=1000:1000 --from=dlfw /usr/local/bin/horovodrun /usr/local/bin/horovodrun
 
+# Install dependencies for hps tf plugin
 RUN apt update -y --fix-missing && \
     apt install -y --no-install-recommends \
-        # [ HugeCTR dependencies ]
         #   Required to build RocksDB.
             libgflags-dev \
             zlib1g-dev libbz2-dev libsnappy-dev liblz4-dev libzstd-dev \
