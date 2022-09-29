@@ -18,6 +18,7 @@ COPY --chown=1000:1000 --from=triton /opt/tritonserver/backends/tensorflow2 back
 # Pinning to pass hugectr sok tests
 RUN pip install tensorflow-gpu==2.9.2 \
     && pip uninstall tensorflow-gpu keras -y
+RUN pip install --upgrade requests
 
 # DLFW Tensorflow packages
 COPY --chown=1000:1000 --from=dlfw /usr/local/lib/python3.8/dist-packages/tensorflow /usr/local/lib/python3.8/dist-packages/tensorflow/
