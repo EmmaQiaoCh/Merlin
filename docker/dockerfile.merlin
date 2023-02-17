@@ -178,7 +178,7 @@ RUN v=8.5.1-1+cuda11.8 && apt update -y --fix-missing && \
     mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600 && \
     apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub && \
     add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /" && \
-    apt install -y --no-install-recommends \
+    apt install -y --no-install-recommends --allow-downgrades \
         ca-certificates \
         clang-format \
         curl \
@@ -234,6 +234,8 @@ RUN v=8.5.1-1+cuda11.8 && apt update -y --fix-missing && \
     apt autoremove -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN nvcc --version
 
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
