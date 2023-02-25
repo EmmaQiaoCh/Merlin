@@ -82,4 +82,5 @@ RUN if [ "$HUGECTR_DEV_MODE" == "false" ]; then \
         git clone --branch ${TFDE_VER} --depth 1 https://github.com/NVIDIA-Merlin/distributed-embeddings.git /distributed_embeddings/ && \
         cd /distributed_embeddings && git submodule update --init --recursive && \
         make pip_pkg && pip install --no-cache-dir artifacts/*.whl && make clean; \
-    fi; \
+    fi;
+
