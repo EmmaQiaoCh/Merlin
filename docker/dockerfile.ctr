@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.2
-ARG MERLIN_VERSION=22.12
-ARG TRITON_VERSION=22.11
+ARG MERLIN_VERSION=23.05
+ARG TRITON_VERSION=23.05
 
 ARG BASE_IMAGE=nvcr.io/nvstaging/merlin/merlin-base:${MERLIN_VERSION}
 
@@ -20,7 +20,7 @@ ENV PATH=$PATH:/usr/lib/x86_64-linux-gnu/
 RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1
 
 RUN pip install --no-cache-dir --upgrade notebook ipython 
-RUN pip install --no-cache-dir mpi4py
+RUN pip install --no-cache-dir git+https://github.com/mpi4py/mpi4py
 
 # Install CUDA-Aware hwloc
 ARG HWLOC_VER=2.4.1
