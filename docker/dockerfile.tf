@@ -70,7 +70,7 @@ RUN if [ "$HUGECTR_DEV_MODE" == "false" ]; then \
 	mv /hugectr/ci ~/hugectr-ci && mv /hugectr/sparse_operation_kit ~/hugectr-sparse_operation_kit && \
     	rm -rf /hugectr && mkdir -p /hugectr && \
         mv ~/hugectr-ci /hugectr/ci && mv ~/hugectr-sparse_operation_kit /hugectr/sparse_operation_kit; \
-    fi \
+    fi && \
     if [ "$INSTALL_DISTRIBUTED_EMBEDDINGS" == "true" ]; then \
         git clone --branch ${TFDE_VER} --depth 1 https://github.com/NVIDIA-Merlin/distributed-embeddings.git /distributed_embeddings/ && \
         cd /distributed_embeddings && git submodule update --init --recursive && \
