@@ -43,7 +43,7 @@ ARG _CI_JOB_TOKEN=""
 ARG HUGECTR_VER=main
 
 ENV CPATH=$CPATH:${HUGECTR_HOME}/include \
-    LD_LIBRARY_PATH=${HUGECTR_HOME}/lib:/usr/local/lib/python3.8/dist-packages/tensorflow:$LD_LIBRARY_PATH \
+    LD_LIBRARY_PATH=${HUGECTR_HOME}/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/tensorflow:$LD_LIBRARY_PATH \
     LIBRARY_PATH=${HUGECTR_HOME}/lib:$LIBRARY_PATH \
     SOK_COMPILE_UNIT_TEST=ON
 
