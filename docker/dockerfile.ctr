@@ -12,18 +12,6 @@ ARG HUGECTR_BACKEND_VER=main
 RUN pip install --no-cache-dir --upgrade notebook ipython 
 RUN pip install --no-cache-dir mpi4py
 
-# Install CUDA-Aware hwloc
-ARG HWLOC_VER=2.4.1
-
-RUN cd /opt/hpcx/ompi/include/openmpi/opal/mca/hwloc/hwloc201 && rm -rfv hwloc201.h hwloc/include/hwloc.h
-RUN mkdir -p /var/tmp && wget -q -nc --no-check-certificate -P /var/tmp https://download.open-mpi.org/release/hwloc/v2.4/hwloc-${HWLOC_VER}.tar.gz && \
-    mkdir -p /var/tmp && tar -x -f /var/tmp/hwloc-${HWLOC_VER}.tar.gz -C /var/tmp && \
-    cd /var/tmp/hwloc-${HWLOC_VER} && \
-    ./configure CPPFLAGS="-I${CUDA_HOME}/include/ -L${CUDA_HOME}/lib64/" LDFLAGS="-L${CUDA_HOME}/lib64" --enable-cuda && \
-    make -j$(nproc) && make install && \
-    rm -rf /var/tmp/hwloc-${HWLOC_VER} /var/tmp/hwloc-${HWLOC_VER}.tar.gz
-
-
 # -----------------------------------------------------------------------------
 #    HugeCTR + Dependencies
 
