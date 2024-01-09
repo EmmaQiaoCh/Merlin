@@ -324,7 +324,7 @@ ENV TF4REC_VER=${TF4REC_VER}
 ENV DL_VER=${DL_VER}
 
 # Add Merlin Repo
-RUN git clone --branch ${MERLIN_VER} --depth 1 https://github.com/NVIDIA-Merlin/Merlin/ /Merlin && \
+RUN git clone --branch ${MERLIN_VER} --depth 1 https://github.com/EmmaQiaoCh/Merlin.git /Merlin && \
     cd /Merlin/ && pip install . --no-deps
 
 # Install Merlin Core
