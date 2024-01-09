@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 container=$1
 devices=$2
@@ -17,6 +17,8 @@ if [ $container != 'merlin-ci-runner' ]; then
 fi
 
 ${ci_script_dir}container_software.sh $container $devices
+echo $?
 ${ci_script_dir}container_integration.sh $container $devices $suppress_failures
+echo $?
 ${ci_script_dir}container_unit.sh $container $devices
-
+echo $?
